@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import Lobby from '../Lobby';
+import Room from '../Room';
 
 
 const VideoChat = () => {
@@ -30,8 +31,7 @@ const VideoChat = () => {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json());
-    console.log('data');
-    console.log(data);
+
     setToken(data.token);
   }, [username, roomName]);
 
@@ -45,11 +45,7 @@ const VideoChat = () => {
 
   if (token) {
     render = (
-      <div>
-        <p>Username: {username}</p>
-        <p>Room: {roomName}</p>
-        <p>Token: {token}</p>
-      </div>
+      <Room roomName={roomName} token={token} handleLogout={handleLogout} />
     );
   } else {
     render = (
