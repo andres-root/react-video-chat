@@ -8,10 +8,6 @@ const Room = ({ roomName, token, handleLogout }) => {
     const [room, setRoom] = useState(null);
     const [participants, setParticipants] = useState([]);
 
-    const remoteParticipants = participants.map((participant) => (
-        <p key={participant.sid}>{participant.identity}</p>
-    ));
-
     useEffect(() => {
       const participantConnected = (participant) => {
         setParticipants(prevParticipants => [...prevParticipants, participant]);
@@ -49,6 +45,12 @@ const Room = ({ roomName, token, handleLogout }) => {
         });
       };
     }, [roomName, token]);
+
+    const remoteParticipants = participants.map(participant => (
+      <Participant key={participant.sid} participant={participant} />
+    ));
+    
+    console.log(participants);
 
     return (
       <div className="room">
