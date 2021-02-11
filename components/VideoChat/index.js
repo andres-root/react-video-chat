@@ -1,5 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
+import Lobby from '../Lobby';
+
+
 const VideoChat = () => {
   const [username, setUsername] = useState('');
   const [roomName, setRoomName] = useState('');
@@ -17,7 +20,7 @@ const VideoChat = () => {
   const handleSubmit = useCallback(async (event) => {
     event.preventDefault();
 
-    const data = await fetch('/video/token/', {
+    const data = await fetch('/api/token/', {
       method: 'POST',
       body: JSON.stringify({
         identity: username,
@@ -27,7 +30,8 @@ const VideoChat = () => {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json());
-    
+    console.log('data');
+    console.log(data);
     setToken(data.token);
   }, [username, roomName]);
 
@@ -36,7 +40,30 @@ const VideoChat = () => {
     setToken(null);
   });
 
-  return <div></div>;
+  // Render the Lobby unless we have a token
+  let render;
+
+  if (token) {
+    render = (
+      <div>
+        <p>Username: {username}</p>
+        <p>Room: {roomName}</p>
+        <p>Token: {token}</p>
+      </div>
+    );
+  } else {
+    render = (
+      <Lobby
+        username={username}
+        roomName={roomName}
+        handleUsernameChange={handleUserNameChange}
+        handleRoomNameChange={handleRoomNameChange}
+        handleSubmit={handleSubmit}
+      />
+    );
+  }
+
+  return render;
 };
 
 export default VideoChat;
